@@ -1,0 +1,9 @@
+body{
+    font-family: Arial;
+    text-align:center;
+}
+input{
+    display:block;
+    margin:10px auto;
+    padding:5px;
+}
