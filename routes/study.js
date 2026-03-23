@@ -6,11 +6,22 @@ const auth = require("../middleware/authMiddleware");
 
 
 // Dashboard
-router.get("/dashboard", auth, async (req, res) => {
-    const sessions = await Session.find({ userId: req.session.userId });
-    res.render("dashboard", { sessions });
-});
+router.get("/dashboard", async (req, res) => {
 
+  const sessions = await Session.find();
+
+  const grouped = {};
+
+  sessions.forEach(s => {
+    if (!grouped[s.subject]) {
+      grouped[s.subject] = [];
+    }
+    grouped[s.subject].push(s);
+  });
+
+  res.render("dashboard", { sessions, grouped });
+
+});
 
 // Add session page
 router.get("/add", auth, (req, res) => {
@@ -19,7 +30,7 @@ router.get("/add", auth, (req, res) => {
 
 
 // Save session (Timer version)
-router.post("/save-session", auth, async (req, res) => {
+router.post("/sessions", auth, async (req, res) => {
 
     const { subject, studyTime, distractionTime } = req.body;
 
